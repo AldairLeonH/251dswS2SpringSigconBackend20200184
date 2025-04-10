@@ -8,7 +8,8 @@ import dsw.sigconbackend.model.Ubigeo;
 import dsw.sigconbackend.repositorio.PersonaRepository;
 import dsw.sigconbackend.repositorio.TipoDocumentoRepository;
 import dsw.sigconbackend.repositorio.UbigeoRepository;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,25 +28,59 @@ public class PersonaService {
     
     public PersonaResponse insertPersona(PersonaRequest personaRequest){
         Integer idTipoDocumento = personaRequest.getIdTipoDocumento();
-        TipoDocumento tipoDocumento = tipoDocumentoRepository.findById(idTipoDocumento).get();
-        if(tipoDocumento == null) return new PersonaResponse(); 
+        TipoDocumento tipoDocumento =tipoDocumentoRepository.findById(idTipoDocumento).get();
+        if(tipoDocumento==null) return new PersonaResponse();
         
-        String idUbigeo = personaRequest.getIdUbigeo();
-        Ubigeo ubigeo = ubigeoRepository.findById(idUbigeo).get();
+        String idUbigeo=personaRequest.getIdUbigeo();
+        Ubigeo ubigeo=ubigeoRepository.findById(idUbigeo).get();
         if(ubigeo==null) return new PersonaResponse();
         
-        Persona persona = new Persona(
-                personaRequest.getIdPersona(),
-                personaRequest.getApellidoPaterno(),
-                personaRequest.getApellidoMaterno(),
-                personaRequest.getNombres(),
-                personaRequest.getFechaNacimiento(),
-                personaRequest.getNDocumento(),
-                personaRequest.getDireccion(),
-                tipoDocumento,
-                ubigeo
-        );
-        persona = personaRepository.save(persona);
+        Persona persona=new Persona(
+            personaRequest.getIdPersona(),
+            personaRequest.getApellidoPaterno(),
+            personaRequest.getApellidoMaterno(),
+            personaRequest.getNombres(),
+            personaRequest.getFechaNacimiento(),
+            personaRequest.getNDocumento(),
+            personaRequest.getDireccion(),
+            tipoDocumento,
+            ubigeo
+        );        
+        persona=personaRepository.save(persona);
         return PersonaResponse.fromEntity(persona);
     }
+    public PersonaResponse updatePersona(PersonaRequest personaRequest){
+        Integer idTipoDocumento = personaRequest.getIdTipoDocumento();
+        TipoDocumento tipoDocumento =tipoDocumentoRepository.findById(idTipoDocumento).get();
+        if(tipoDocumento==null) return new PersonaResponse();
+        
+        String idUbigeo=personaRequest.getIdUbigeo();
+        Ubigeo ubigeo=ubigeoRepository.findById(idUbigeo).get();
+        if(ubigeo==null) return new PersonaResponse();
+        
+        Persona persona=new Persona(
+            personaRequest.getIdPersona(),
+            personaRequest.getApellidoPaterno(),
+            personaRequest.getApellidoMaterno(),
+            personaRequest.getNombres(),
+            personaRequest.getFechaNacimiento(),
+            personaRequest.getNDocumento(),
+            personaRequest.getDireccion(),
+            tipoDocumento,
+            ubigeo
+        );        
+        persona=personaRepository.save(persona);
+        return PersonaResponse.fromEntity(persona);
+    }
+    public void deletePersona(Long id){
+        personaRepository.deleteById(id);
+    }
+    
+    public PersonaResponse findPersona(Long id){                
+        Optional<Persona> result=personaRepository.findById(id);
+        if(!result.isPresent())
+            return null;
+        return PersonaResponse.fromEntity(result.get());
+    }
+    
 }
