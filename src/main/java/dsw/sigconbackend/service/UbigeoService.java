@@ -12,6 +12,6 @@ public class UbigeoService {
     UbigeoRepository ubigeoRepository;
     
     public List<Ubigeo> getUbigeo(){
-        return (List<Ubigeo>)ubigeoRepository.findAll();
+        return (List<Ubigeo>) ubigeoRepository.findAll();
     }
 }

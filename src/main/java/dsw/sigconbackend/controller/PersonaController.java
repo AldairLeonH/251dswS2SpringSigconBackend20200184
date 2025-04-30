@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(path="api/v1/persona")
 
-public class PersonaController {
+public class PersonaController{
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     PersonaService personaService;
@@ -36,9 +36,10 @@ public class PersonaController {
             logger.error("Error inesperado",e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        if(listaPersonaResponse.isEmpty())
+        if(listaPersonaResponse.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).
                     body(ErrorResponse.builder().message("Persona not found").build());
+        }
         return ResponseEntity.ok(listaPersonaResponse);
     }
     
@@ -54,9 +55,10 @@ public class PersonaController {
             logger.error("Error inesperado",e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        if(personaResponse == null)
+        if(personaResponse == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).
                     body(ErrorResponse.builder().message("Persona not found").build());
+        }
         return ResponseEntity.ok(personaResponse);
     }
     
@@ -67,8 +69,9 @@ public class PersonaController {
         try{
             //validar que la persona exista
             personaResponse=personaService.findPersona(personaRequest.getIdPersona());
-            if (personaResponse==null)
+            if (personaResponse==null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.builder().message("Persona not found").build());
+            }
             
             personaResponse=personaService.updatePersona(personaRequest);
             
@@ -76,8 +79,9 @@ public class PersonaController {
             logger.error("Error inesperado",e);
             return new ResponseEntity<>(null,HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        if(personaResponse==null)
+        if(personaResponse==null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.builder().message("Persona not update").build());
+        }
         return ResponseEntity.ok(personaResponse);                
     }
     @DeleteMapping()
@@ -87,8 +91,9 @@ public class PersonaController {
         try{
             //validar que la persona exista
             personaResponse=personaService.findPersona(personaRequest.getIdPersona());
-            if (personaResponse==null)
+            if (personaResponse==null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.builder().message("Persona not found for delete").build());
+            }
             
             personaService.deletePersona(personaRequest.getIdPersona());
             
@@ -109,8 +114,9 @@ public class PersonaController {
             logger.error("Error inesperado",e);
             return new ResponseEntity<>(null,HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        if(personaResponse==null)
+        if(personaResponse==null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.builder().message("Persona not found").build());
+        }
         return ResponseEntity.ok(personaResponse);                
     }
 }
